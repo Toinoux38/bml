@@ -23,13 +23,23 @@
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                             Catégorie
                         </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                            ISBN
+                        </th>
+
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                            Couverture
+                        </th>
 
                     </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800">
                     @foreach($books as $book)
                         <tr class="text-gray-500">
+
                             <td class="px-6 py-4 whitespace-nowrap" >
+
+
                                 {{ $book->title }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
@@ -41,6 +51,14 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 {{ $book->category }}
                             </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {{ $book->ISBN }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <img class="rounded" src="https://covers.openlibrary.org/b/isbn/{{$book->ISBN}}-S.jpg" />
+                            </td>
+
+
                         </tr>
                     @endforeach
                     </tbody>
