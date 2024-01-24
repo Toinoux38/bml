@@ -18,12 +18,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/books', [BookController::class, 'index'])->name('books.index');
+Route::get('/add-book', 'BookController@create');
+
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [BookController::class, 'index'])->name('dashboard');
+    Route::get('/action', [BookController::class, 'actionmenu'])->name('action');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
 });
 
 require __DIR__.'/auth.php';
