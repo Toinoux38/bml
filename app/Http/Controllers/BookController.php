@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Http\Request;
+use App\Models\Book;
 class BookController extends Controller
 {
     public function index()
@@ -19,14 +20,44 @@ class BookController extends Controller
     }
     public function create()
     {
-        return view('books.create-book');
+        return view('dashboard'); // Return the dashboard view where the modal is located
     }
 
-    public function viewCreate()
+    public function store(Request $request)
+{
+    // Validate the request data
+    $validatedData = $request->validate([
+        'title' => 'required',
+        'ISBN' => 'required',
+        // Add more validation rules as per your book model
+    ]);
+
+    // Calculate the new bookID
+    $maxBookID = Book::max('bookID');
+    $newBookID = $maxBookID + 1;
+
+    // Create a new book instance
+    $book = new Book;
+    $book->bookID = $newBookID;
+    $book->title = $validatedData['title'];
+    $book->ISBN = $validatedData['ISBN'];
+    // Set other attributes as per your book model
+
+    // Save the book to the database
+    $book->save();
+
+    // Redirect back to the dashboard with a success message
+    return redirect('/dashboard')->with('success', 'Book added successfully');
+}
+    public function destroy($id)
     {
-        // Redirect to the form for adding a new book
-        return redirect('/add-book');
+        $book = Book::findOrFail($id);
+        $book->delete();
+
+        // You can return a response if needed
+        return response()->json(['message' => 'Book deleted successfully']);
     }
+
 }
 
 

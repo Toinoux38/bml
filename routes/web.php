@@ -13,13 +13,15 @@ use App\Http\Controllers\BookController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+use App\Http\Controllers\AuthorController;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+
 Route::get('/books', [BookController::class, 'index'])->name('books.index');
 Route::get('/add-book', 'BookController@create');
-
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [BookController::class, 'index'])->name('dashboard');
@@ -27,6 +29,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/book/create', [BookController::class, 'create'])->name('book.create');
+    Route::post('/book', [BookController::class, 'store'])->name('book.store');
+    Route::delete('/delete/{id}', [BookController::class, 'destroy'])->name('books.delete');
 
 });
 
