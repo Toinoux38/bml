@@ -7,11 +7,23 @@ use Illuminate\Http\Request;
 use App\Models\Book;
 class BookController extends Controller
 {
-    public function index()
+
+    public function index(Request $request)
     {
-        $books = DB::table('book')->paginate(20); // Change 10 to the desired number of books per page
+        $query = $request->input('search');
+
+        // Conditionally apply search filters
+        $booksQuery = Book::query();
+        if ($query) {
+            $booksQuery->where('ISBN', 'like', "%$query%")
+                ->orWhere('title', 'like', "%$query%");
+        }
+
+        $books = $booksQuery->paginate(20);
+
         return view('dashboard', compact('books'));
     }
+
 
     public function actionmenu()
     {
