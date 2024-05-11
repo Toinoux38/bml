@@ -41,6 +41,8 @@ class MemberController extends Controller
         $validatedData = $request->validate([
             'lastname' => 'required',
             'firstname' => 'required',
+            'adress' => 'required',
+            'phonenumber' => 'required',
             // Add more validation rules as per your member model
         ]);
 
@@ -55,6 +57,7 @@ class MemberController extends Controller
         $member->firstname = $validatedData['firstname'];
         $member->phonenumber = $validatedData['phonenumber'];
 
+
         // Save the member to the database
         $member->save();
 
@@ -67,7 +70,7 @@ class MemberController extends Controller
         $member->delete();
 
         // You can return a response if needed
-        return response()->json(['message' => 'member deleted successfully']);
+        return redirect('/members')->with('success', 'member deleted successfully');
     }
 
 }

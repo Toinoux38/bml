@@ -17,8 +17,8 @@
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                             </svg>
                         </div>
-                        <input type="search" id="search" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search" required>
-                        <button type="submit" class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
+                        <input type="search" name="search" id="search" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Titre, ISBN, ..." required>
+                        <button type="submit" class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">&gt;</button>
                     </div>
                 </form>
 
@@ -35,7 +35,7 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="max-w-9xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
 {{--                <button class="btn btn-primary btn-sm" onclick="the function would be here...">--}}
 {{--                    <i class="bi bi-plus"></i> Add Book--}}
@@ -96,6 +96,9 @@
                     <thead class="bg-gray-50 dark:bg-gray-700">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                            ID
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                             Titre
                         </th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
@@ -121,11 +124,11 @@
                     <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800">
                     @foreach($books as $book)
                         <tr class="text-gray-500">
-
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {{ $book->bookID }}
+                            </td>
                             <td class="px-6 py-4 whitespace-nowrap font-semibold text-gray-50" >
-
-
-                                {{ $book->title }}
+                                <a href="{{ route('books.show', $book) }}">{{ $book->title }}</a>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 {{ $book->publication_date }}
@@ -140,7 +143,6 @@
                                 <img class="rounded" src="https://covers.openlibrary.org/b/isbn/{{$book->ISBN}}-S.jpg" />
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <!-- Add a delete button -->
                                 <button data-modal-target="popup-modal-{{ $book->bookID }}" data-modal-toggle="popup-modal-{{ $book->bookID }}" class="text-red-500 hover:text-red-700 focus:outline-none">
                                     Supprimer
                                 </button>

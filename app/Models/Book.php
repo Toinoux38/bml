@@ -10,5 +10,10 @@ class Book extends Model
     use HasFactory;
     protected $table = 'book';
     protected $primaryKey = 'bookID';
-    protected $fillable = ['title', 'publication_date', 'ISBN','category', 'bookID', 'author'];
+    protected $fillable = ['title', 'publication_date', 'ISBN','category', 'author'];
+
+    public function reservations()
+    {
+        return $this->hasOne(Reservation::class, 'bookID', 'bookID');
+    }
 }
