@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Book;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Reservation;
@@ -13,7 +14,7 @@ class ReservationController extends Controller
     {
         $query = $request->input('search');
 
-        // Conditionally apply search filters
+        // fonction de recherche (avec les filtres, pour le moment uniquement par reservationID et bookID)
         $reservationsQuery = Reservation::query();
         if ($query) {
             $reservationsQuery->where('reservationID', 'like', "%$query%")
@@ -29,12 +30,11 @@ class ReservationController extends Controller
 
     public function actionmenu()
     {
-        // Change 10 to the desired number of reservations per page
         return view('action');
     }
     public function create()
     {
-        return view('reservations'); // Return the dashboard view where the modal is located
+        return view('reservations');
     }
 
     public function store(Request $request)
@@ -43,33 +43,38 @@ class ReservationController extends Controller
         $validatedData = $request->validate([
             'memberID' => 'required',
             'bookID' => 'required',
-            'duration' => 'required|numeric', // Ensure duration is numeric
+            'duration' => 'required|numeric',
         ]);
 
-        // Calculate due date based on loan duration
-        $loanDate = Carbon::now(); // Current date is the loan date
-        $dueDate = $loanDate->copy()->addDays($validatedData['duration']); // Add loan duration to get due date
+        $book = Book::find($validatedData['bookID']);
 
-        // Create a new reservation instance
+        if (!$book) {
+            return redirect()->route('reservations')->with('error', 'Le livre n\'existe pas.');
+        }
+
+        // calcule la date de retour en ajoutant le nombre de jour
+        $loanDate = Carbon::now();
+        $dueDate = $loanDate->copy()->addDays($validatedData['duration']);
+
+
         $reservation = new Reservation;
         $reservation->memberID = $validatedData['memberID'];
         $reservation->bookID = $validatedData['bookID'];
-        $reservation->loan_date = $loanDate; // Store loan date
-        $reservation->due_date = $dueDate; // Store due date
+        $reservation->loan_date = $loanDate;
+        $reservation->due_date = $dueDate;
 
-        // Save the reservation to the database
+
         $reservation->save();
 
-        // Redirect back to the dashboard with a success message
-        return redirect('/reservations')->with('success', 'Reservation added successfully');
+
+        return redirect('/reservations')->with('success', 'Reservation ajoutée avec succès.');
     }
     public function destroy($id)
     {
         $reservation = reservation::findOrFail($id);
         $reservation->delete();
 
-        // You can return a response if needed
-        return redirect('/reservations')->with('success', 'reservation deleted successfully');
+        return redirect('/reservations')->with('success', 'Reservation supprimée avec succès.');
     }
 
 }

@@ -12,7 +12,7 @@ class BookController extends Controller
     {
         $query = $request->input('search');
 
-        // Conditionally apply search filters
+        // fonction de recherche
         $booksQuery = Book::query();
         if ($query) {
             $booksQuery->where('ISBN', 'like', "%$query%")
@@ -27,7 +27,6 @@ class BookController extends Controller
 
     public function actionmenu()
     {
-
         return view('action');
     }
     public function create()
@@ -56,11 +55,15 @@ class BookController extends Controller
 }
     public function destroy($id)
     {
-        $book = Book::findOrFail($id);
+        $book = Book::find($id);
+
+        if ($book->reservations()->exists()) {
+            return redirect()->route('books.index')->with('error', 'Le livre est actuellement réservé et ne peut pas être supprimé.');
+        }
+
         $book->delete();
 
-        // You can return a response if needed
-        return redirect('/dashboard')->with('success', 'Book deleted successfully');
+        return redirect()->route('books.index')->with('success', 'Le livre a été supprimé avec succès.');
     }
 
     public function show(Book $book)

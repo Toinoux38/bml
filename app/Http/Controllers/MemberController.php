@@ -12,7 +12,7 @@ class MemberController extends Controller
     {
         $query = $request->input('search');
 
-        // Conditionally apply search filters
+        // fonction de recherche
         $membersQuery = member::query();
         if ($query) {
             $membersQuery->where('memberID', 'like', "%$query%")
